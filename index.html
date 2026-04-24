@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zico Molas – Molas para Caminhões</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0d0f;
+    --surface: #13151a;
+    --card: #1b1e26;
+    --border: #252830;
+    --red: #e8192e;
+    --red-dim: rgba(232,25,46,0.12);
+    --white: #f0f1f3;
+    --muted: #6b7280;
+    --mid: #9ca3af;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(12,13,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    color: var(--white);
+  }
+  .logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--red) !important;
+    color: var(--white) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 6px;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(232,25,46,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,25,46,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(232,25,46,0.18) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    z-index: 0; pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--red-dim);
+    border: 1px solid rgba(232,25,46,0.3);
+    color: var(--red);
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 0.4rem 1rem; border-radius: 100px;
+    margin-bottom: 2rem; width: fit-content;
+    position: relative; z-index: 1;
+  }
+  .hero-tag::before {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--red); display: block;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 7vw, 7.5rem);
+    line-height: 1; letter-spacing: -2px;
+    color: var(--white);
+    position: relative; z-index: 1;
+    max-width: 900px; margin-bottom: 1.5rem;
+  }
+  .hero-title .accent { color: var(--red); }
+  .hero-title .outline {
+    -webkit-text-stroke: 1.5px rgba(240,241,243,0.25);
+    color: transparent;
+  }
+  .hero-sub-row {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    position: relative; z-index: 1;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .hero-desc { font-size: 1.05rem; color: var(--mid); line-height: 1.75; max-width: 480px; }
+  .hero-actions { display: flex; gap: 1rem; flex-shrink: 0; }
+  .btn-red {
+    background: var(--red); color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: opacity 0.2s; white-space: nowrap; display: inline-block;
+  }
+  .btn-red:hover { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent; color: var(--mid);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none; border: 1px solid var(--border); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s; white-space: nowrap; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--mid); color: var(--white); }
+
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    color: var(--muted); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    z-index: 1; animation: bob 2.5s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+  .scroll-hint svg { width: 18px; }
+
+  /* STRIP */
+  .strip { background: var(--red); overflow: hidden; padding: 1.2rem 0; white-space: nowrap; }
+  .strip-inner { display: inline-flex; gap: 4rem; animation: marquee 18s linear infinite; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .strip-item {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+    display: inline-flex; align-items: center; gap: 1.5rem;
+  }
+  .strip-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+
+  /* SECTIONS */
+  .sec { padding: 7rem 4rem; }
+  .sec-label { font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 0.75rem; font-weight: 500; }
+  .sec-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 3.5vw, 3.2rem); letter-spacing: -1px; line-height: 1.1; color: var(--white); margin-bottom: 1rem; }
+  .sec-desc { font-size: 1rem; color: var(--mid); line-height: 1.75; max-width: 520px; }
+
+  /* SERVIÇOS */
+  .services-sec { background: var(--surface); }
+  .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; gap: 2rem; flex-wrap: wrap; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+  }
+  .srv {
+    background: var(--card); padding: 2.5rem 2rem;
+    position: relative; transition: background 0.25s; cursor: default;
+  }
+  .srv:hover { background: #20242f; }
+  .srv-num { font-family: 'Syne', sans-serif; font-size: 0.72rem; letter-spacing: 2px; color: var(--red); font-weight: 700; margin-bottom: 1.5rem; }
+  .srv-icon { font-size: 2rem; margin-bottom: 1.2rem; }
+  .srv-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.3px; color: var(--white); margin-bottom: 0.7rem; }
+  .srv-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+  .srv-arrow {
+    position: absolute; bottom: 1.5rem; right: 1.5rem;
+    width: 32px; height: 32px;
+    border: 1px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 0.9rem;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .srv:hover .srv-arrow { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+
+  /* DIFERENCIAIS */
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .diff-list { display: flex; flex-direction: column; gap: 0; }
+  .diff-item {
+    display: flex; align-items: flex-start; gap: 1.5rem;
+    padding: 1.8rem 0; border-bottom: 1px solid var(--border);
+  }
+  .diff-item:first-child { border-top: 1px solid var(--border); }
+  .diff-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.75rem; color: var(--red); letter-spacing: 1px; margin-top: 4px; flex-shrink: 0; width: 28px; }
+  .diff-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--white); margin-bottom: 0.4rem; }
+  .diff-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+
+  .diff-visual {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3rem 2.5rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+  .metric { display: flex; flex-direction: column; gap: 0.4rem; }
+  .metric-label { font-size: 0.78rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .metric-bar-bg { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .metric-bar { height: 100%; background: var(--red); border-radius: 99px; width: 0; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+  .metric-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--white); }
+  .diff-visual-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--white); letter-spacing: -0.5px; margin-bottom: 0.5rem; }
+  .diff-visual-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 1rem; }
+
+  /* LOCALIZAÇÃO */
+  .loc-sec { background: var(--surface); }
+  .loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .loc-map-placeholder {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; height: 340px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; color: var(--muted); font-size: 0.9rem;
+    position: relative; overflow: hidden;
+  }
+  .loc-map-placeholder::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+  }
+  .map-icon { font-size: 2.5rem; z-index: 1; }
+  .map-text { z-index: 1; text-align: center; line-height: 1.6; }
+  .map-link {
+    z-index: 1; background: var(--red); color: var(--white);
+    padding: 0.6rem 1.4rem; border-radius: 6px;
+    font-size: 0.85rem; font-weight: 500;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .map-link:hover { opacity: 0.85; }
+  .loc-info { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+  .loc-row {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    padding: 1.3rem; background: var(--card);
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  .loc-icon {
+    width: 38px; height: 38px; background: var(--red-dim);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .loc-text-label { font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; font-weight: 500; }
+  .loc-text-val { font-size: 0.95rem; color: var(--white); line-height: 1.5; }
+
+  /* CTA / CONTATO */
+  .cta-sec { position: relative; overflow: hidden; background: var(--bg); padding: 7rem 4rem; text-align: center; }
+  .cta-glow {
+    position: absolute; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,25,46,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    letter-spacing: -2px; line-height: 1;
+    color: var(--white); margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .cta-title .outline { -webkit-text-stroke: 1.5px rgba(240,241,243,0.2); color: transparent; }
+  .cta-desc { font-size: 1rem; color: var(--mid); margin-bottom: 2.5rem; position: relative; z-index: 1; }
+
+  .contact-form-wrap {
+    max-width: 540px; margin: 3rem auto 0;
+    position: relative; z-index: 1;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 2.5rem; text-align: left;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+  .form-label { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .form-input, .form-textarea, .form-select {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--white); padding: 0.75rem 1rem;
+    border-radius: 8px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; outline: none;
+    transition: border-color 0.2s; width: 100%;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: var(--red); }
+  .form-select option { background: var(--surface); }
+  .form-textarea { resize: vertical; min-height: 100px; }
+  .form-submit {
+    width: 100%; background: var(--red); color: var(--white);
+    padding: 0.9rem; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; font-weight: 500;
+    border: none; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem;
+  }
+  .form-submit:hover { opacity: 0.85; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 2.5rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem; flex-wrap: wrap;
+  }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.3px; color: var(--white); }
+  .footer-logo span { color: var(--red); }
+  .footer-right { font-size: 0.82rem; color: var(--muted); text-align: right; line-height: 1.6; }
+
+  /* REVEAL */
+  .reveal { opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.show { opacity:1; transform:none; }
+  .reveal-d1 { transition-delay:.1s }
+  .reveal-d2 { transition-delay:.2s }
+  .reveal-d3 { transition-delay:.3s }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 0 1.5rem 5rem; }
+    .sec { padding: 5rem 1.5rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .diff-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .loc-grid { grid-template-columns: 1fr; }
+    .cta-sec { padding: 5rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    .footer-right { text-align: left; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Zico<span>Molas</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#localizacao">Localização</a></li>
+    <li><a href="#contato" class="nav-cta">Solicitar orçamento</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-tag">Especialistas em molas para caminhões</div>
+  <h1 class="hero-title">
+    Molas que<br>
+    <span class="accent">aguentam</span><br>
+    <span class="outline">qualquer carga</span>
+  </h1>
+  <div class="hero-sub-row">
+    <p class="hero-desc">
+      Venda, reparo e fabricação de molas para caminhões em Almirante Tamandaré – PR.
+      Atendemos frotas de toda a Grande Curitiba e região.
+    </p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn-red">Solicitar orçamento</a>
+      <a href="#servicos" class="btn-ghost">Ver serviços</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    scroll
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-inner">
+    <span class="strip-item">Molas de Folha <span class="strip-dot"></span></span>
+    <span class="strip-item">Molas Parabólicas <span class="strip-dot"></span></span>
+    <span class="strip-item">Usinagem e Solda <span class="strip-dot"></span></span>
+    <span class="strip-item">Manutenção Mecânica <span class="strip-dot"></span></span>
+    <span class="strip-item">Venda de Peças <span class="strip-dot"></span></span>
+    <span class="strip-item">Transporte de Carga <span class="strip-dot"></span></span>
+    <span class="strip-item">Almirante Tamandaré – PR <span class="strip-dot"></span></span>
+    <span class="strip-item">Molas de Folha <span class="strip-dot"></span></span>
+    <span class="strip-item">Molas Parabólicas <span class="strip-dot"></span></span>
+    <span class="strip-item">Usinagem e Solda <span class="strip-dot"></span></span>
+    <span class="strip-item">Manutenção Mecânica <span class="strip-dot"></span></span>
+    <span class="strip-item">Venda de Peças <span class="strip-dot"></span></span>
+    <span class="strip-item">Transporte de Carga <span class="strip-dot"></span></span>
+    <span class="strip-item">Almirante Tamandaré – PR <span class="strip-dot"></span></span>
+  </div>
+</div>
+
+<section id="servicos" class="sec services-sec">
+  <div class="services-header reveal">
+    <div>
+      <p class="sec-label">O que fazemos</p>
+      <h2 class="sec-title">Serviços completos<br>para sua frota</h2>
+    </div>
+    <p class="sec-desc">Do diagnóstico à entrega: molas novas, reparos, peças e transporte. Tudo que seu caminhão precisa em um só lugar.</p>
+  </div>
+  <div class="services-grid">
+    <div class="srv reveal reveal-d1">
+      <div class="srv-num">01</div>
+      <div class="srv-icon">🔩</div>
+      <div class="srv-name">Molas de Caminhão</div>
+      <p class="srv-desc">Venda e substituição de molas de folha e parabólicas para todo tipo de caminhão. Peças novas para máxima durabilidade e segurança.</p>
+      <div class="srv-arrow">↗</div>
+    </div>
+    <div class="srv reveal reveal-d2">
+      <div class="srv-num">02</div>
+      <div class="srv-icon">⚙️</div>
+      <div class="srv-name">Usinagem e Solda</div>
+      <p class="srv-desc">Serviços de usinagem, torneiria e solda com precisão. Fabricamos e recondicionamos componentes de suspensão sob medida.</p>
+      <div class="srv-arrow">↗</div>
+    </div>
+    <div class="srv reveal reveal-d3">
+      <div class="srv-num">03</div>
+      <div class="srv-icon">🔧</div>
+      <div class="srv-name">Manutenção Mecânica</div>
+      <p class="srv-desc">Reparação mecânica completa de veículos automotores. Diagnóstico e mão de obra especializada para manter sua frota na estrada.</p>
+      <div class="srv-arrow">↗</div>
+    </div>
+    <div class="srv reveal reveal-d1">
+      <div class="srv-num">04</div>
+      <div class="srv-icon">🛒</div>
+      <div class="srv-name">Venda de Peças</div>
+      <p class="srv-desc">Comercialização a varejo e atacado de peças e acessórios novos para veículos automotores. Estoque com pronta entrega.</p>
+      <div class="srv-arrow">↗</div>
+    </div>
+    <div class="srv reveal reveal-d2">
+      <div class="srv-num">05</div>
+      <div class="srv-icon">🚛</div>
+      <div class="srv-name">Transporte de Carga</div>
+      <p class="srv-desc">Transporte rodoviário de carga municipal, intermunicipal e interestadual. Atendimento no Paraná e estados vizinhos.</p>
+      <div class="srv-arrow">↗</div>
+    </div>
+    <div class="srv reveal reveal-d3" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;background:var(--red-dim);border:none;">
+      <div style="font-size:2rem;">💬</div>
+      <div class="srv-name" style="color:var(--red)">Precisa de algo?</div>
+      <p class="srv-desc">Entre em contato e nos conte o que você precisa. Vamos encontrar a solução certa.</p>
+      <a href="#contato" class="btn-red" style="font-size:0.85rem;padding:0.6rem 1.4rem;">Falar conosco</a>
+    </div>
+  </div>
+</section>
+
+<section id="diferenciais" class="sec">
+  <div class="diff-grid">
+    <div>
+      <p class="sec-label reveal">Por que nos escolher</p>
+      <h2 class="sec-title reveal">O que nos<br>diferencia</h2>
+      <div class="diff-list">
+        <div class="diff-item reveal">
+          <div class="diff-num">01</div>
+          <div>
+            <div class="diff-name">Peças novas e originais</div>
+            <p class="diff-desc">Trabalhamos apenas com peças originais novas para garantir segurança e desempenho mesmo nas cargas mais pesadas.</p>
+          </div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-num">02</div>
+          <div>
+            <div class="diff-name">Localização estratégica</div>
+            <p class="diff-desc">Na Rodovia dos Minérios, em Almirante Tamandaré – PR, com fácil acesso para toda a Grande Curitiba e região.</p>
+          </div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-num">03</div>
+          <div>
+            <div class="diff-name">Especialistas em suspensão</div>
+            <p class="diff-desc">Equipe técnica com experiência em sistemas de suspensão de caminhões pesados, carretas e ônibus.</p>
+          </div>
+        </div>
+        <div class="diff-item reveal">
+          <div class="diff-num">04</div>
+          <div>
+            <div class="diff-name">Solução completa</div>
+            <p class="diff-desc">Peças, mecânica, usinagem e transporte em um único fornecedor. Menos deslocamento, mais agilidade para sua frota.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="diff-visual reveal">
+      <div class="diff-visual-title">Nossos números</div>
+      <div class="diff-visual-sub">Indicadores do serviço Zico Molas</div>
+      <div class="metric">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="metric-label">Satisfação dos clientes</span>
+          <span class="metric-val">98%</span>
+        </div>
+        <div class="metric-bar-bg"><div class="metric-bar" data-width="98"></div></div>
+      </div>
+      <div class="metric">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="metric-label">Peças novas e originais</span>
+          <span class="metric-val">100%</span>
+        </div>
+        <div class="metric-bar-bg"><div class="metric-bar" data-width="100"></div></div>
+      </div>
+      <div class="metric">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="metric-label">Prazo de entrega cumprido</span>
+          <span class="metric-val">95%</span>
+        </div>
+        <div class="metric-bar-bg"><div class="metric-bar" data-width="95"></div></div>
+      </div>
+      <div class="metric">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="metric-label">Cobertura Grande Curitiba</span>
+          <span class="metric-val">✓</span>
+        </div>
+        <div class="metric-bar-bg"><div class="metric-bar" data-width="85"></div></div>
+      </div>
+      <div style="margin-top:1rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:2rem;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--white);letter-spacing:-1px">2023</div>
+          <div style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Fundação</div>
+        </div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--red);letter-spacing:-1px">5+</div>
+          <div style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Serviços</div>
+        </div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--white);letter-spacing:-1px">PR</div>
+          <div style="font-size:0.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Cobertura</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="localizacao" class="sec loc-sec">
+  <p class="sec-label reveal">Onde estamos</p>
+  <h2 class="sec-title reveal" style="margin-bottom:3rem">Localização</h2>
+  <div class="loc-grid">
+    <div class="loc-map-placeholder reveal">
+      <div class="map-icon">📍</div>
+      <div class="map-text">Rodovia dos Minérios, 12432<br>Tranqueira – Almirante Tamandaré, PR</div>
+      <a class="map-link" href="https://maps.google.com/?q=Rodovia+dos+Minerios+12432+Almirante+Tamandare+PR" target="_blank" rel="noopener">Abrir no Google Maps</a>
+    </div>
+    <div class="loc-info">
+      <div class="loc-row reveal">
+        <div class="loc-icon">📍</div>
+        <div>
+          <div class="loc-text-label">Endereço</div>
+          <div class="loc-text-val">Rodovia dos Minérios, 12432 – Tranqueira<br>Almirante Tamandaré – PR, CEP 83.514-505</div>
+        </div>
+      </div>
+      <div class="loc-row reveal">
+        <div class="loc-icon">🕐</div>
+        <div>
+          <div class="loc-text-label">Horário de atendimento</div>
+          <div class="loc-text-val">Segunda a Sexta: 08h às 18h<br>Sábado: 08h às 12h</div>
+        </div>
+      </div>
+      <div class="loc-row reveal">
+        <div class="loc-icon">🚚</div>
+        <div>
+          <div class="loc-text-label">Área de atendimento</div>
+          <div class="loc-text-val">Grande Curitiba, interior do Paraná<br>e demais estados mediante consulta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato" class="cta-sec">
+  <div class="cta-glow"></div>
+  <p class="sec-label">Fale com a gente</p>
+  <h2 class="cta-title reveal">Solicite seu<br><span class="outline">orçamento</span></h2>
+  <p class="cta-desc reveal">Preencha o formulário e entraremos em contato o mais rápido possível.</p>
+  <div class="contact-form-wrap reveal">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nome</label>
+        <input class="form-input" type="text" placeholder="Seu nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefone / WhatsApp</label>
+        <input class="form-input" type="tel" placeholder="(41) 9 0000-0000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tipo de serviço</label>
+      <select class="form-select">
+        <option value="">Selecione...</option>
+        <option>Mola de caminhão – venda</option>
+        <option>Mola de caminhão – reparo</option>
+        <option>Usinagem e solda</option>
+        <option>Manutenção mecânica</option>
+        <option>Venda de peças</option>
+        <option>Transporte de carga</option>
+        <option>Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Descreva o que precisa</label>
+      <textarea class="form-textarea" placeholder="Modelo do caminhão, tipo de mola, quantidade..."></textarea>
+    </div>
+    <button class="form-submit" onclick="this.textContent='Mensagem enviada! ✓';this.style.background='#16a34a';this.disabled=true;">Enviar solicitação</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Zico<span>Molas</span></div>
+  <div class="footer-right">
+    Almirante Tamandaré – PR &nbsp;|&nbsp; Rodovia dos Minérios, 12432<br>
+    © 2025 Zico Molas Ltda. Todos os direitos reservados.
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => { e.target.style.width = e.target.dataset.width + '%'; }, 200);
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.metric-bar').forEach(b => barObs.observe(b));
+</script>
+</body>
+</html>
